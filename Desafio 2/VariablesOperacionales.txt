@@ -1,0 +1,123 @@
+import pandas as pd
+data = pd.read_csv("bd_variablesOperacionales.csv")
+data.shape
+data.dtypes.value_counts()
+data.keys()
+print(data.dtypes)
+data.select_dtypes(include = 'object')
+varEquipo = pd.read_csv("Muestra_DATA_AMSA.csv", sep = ';' )
+varEquipo
+varEquipo.values[:,0]
+import collections, numpy
+collections.Counter(varEquipo.values[:,0])
+import numpy as np
+llaveEquipo = varEquipo['EQUIPO'].unique()
+nCarac = varEquipo['EQUIPO'].value_counts()
+Carac = varEquipo['VARIABLE']
+feat_CV005 = Carac[21:143]
+feat_CV006 = Carac[143:248]
+feat_CV007 = Carac[248:329]
+data_CV005 = np.zeros((1578240,len(feat_CV005)+2))
+data_CV006 = np.zeros((1578240,len(feat_CV006)))
+data_CV007 = np.zeros((1578240,len(feat_CV007)+1))
+a = feat_CV005.to_numpy()
+for i in range(len(a)):
+    if a[i] == 'estado_cv05' or a[i] == 'estadoStockPilePlanta_cv05':
+        print(i)
+        continue
+    else:
+        data_CV005[:,i]= data[a[i]]
+d = feat_CV006.to_numpy()
+for i in range(len(d)):
+    if d[i] == 'estadoCorrea_cv06':
+        print(i)
+        continue
+    else:
+        data_CV006[:,i]= data[d[i]]
+e = feat_CV007.to_numpy()
+for i in range(len(e)):
+    if e[i] == 'estadoCorrea_cv07':
+        print(i)
+        continue
+    else:
+        data_CV007[:,i]= data[e[i]]
+prueba = data[a[57]].values
+print(np.unique(prueba))
+np.where(prueba == 'I/O Timeout')
+prueba = data[d[104]].values
+print(np.unique(prueba))
+np.where(prueba == 'I/O Timeout')
+prueba = data[e[80]].values
+print(np.unique(prueba))
+np.where(prueba == 'I/O Timeout')
+b = data[a[56]].values
+for i in range(len(b)):
+    if b[i] == 'DETENIDO':
+        data_CV005[i,56] = 0
+    if b[i] == 'FUNCIONANDO':
+        data_CV005[i,56] = 1
+    if b[i] == 'I/O Timeout':
+        data_CV005[i,56] = 2
+    if b[i] == "{'Name': 'DETENIDO', 'Value': 0, 'IsSystem': False}":
+        data_CV005[i,56] = 3
+    if b[i] == "{'Name': 'FUNCIONANDO', 'Value': 1, 'IsSystem': False}":
+        data_CV005[i,56] = 4
+    if b[i] == 'Not Connect':
+        data_CV005[i,56] = 5        
+c = data[a[57]].values
+for i in range(len(c)):
+    if c[i] == 'DETEN':
+        data_CV005[i,57] = 0
+    if c[i] == 'FUNC':
+        data_CV005[i,57] = 1
+    if c[i] == 'No Data':
+        data_CV005[i,57] = 9
+    if c[i] == 'Pt Created':
+        data_CV005[i,57] = 6
+    if c[i] == 'Shutdown':
+        data_CV005[i,57] = 7
+    if c[i] == "{'Name': 'DETEN', 'Value': 0, 'IsSystem': False}":
+        data_CV005[i,57] = 3
+    if c[i] == "{'Name': 'FUNC', 'Value': 1, 'IsSystem': False}":
+        data_CV005[i,57] = 4
+    if c[i] == "{'Name': 'Shutdown', 'Value': 254, 'IsSystem': True}":
+        data_CV005[i,57] = 8
+
+b = data[d[104]].values # conservar los mismos valores 
+print(b)
+for i in range(len(b)):
+    if b[i] == 'DETENIDO':
+        data_CV006[i,104] = 0
+    if b[i] == 'FUNCIONANDO':
+        data_CV006[i,104] = 1
+    if b[i] == 'I/O Timeout':
+        data_CV006[i,104] = 2
+    if b[i] == 'Not Connect':
+        data_CV006[i,104] = 5  
+b = data[e[80]].values # conservar los mismos valores 
+print(b)
+for i in range(len(b)):
+    if b[i] == 'DETENIDO':
+        data_CV007[i,80] = 0
+    if b[i] == 'FUNCIONANDO':
+        data_CV007[i,80] = 1
+    if b[i] == 'I/O Timeout':
+        data_CV007[i,80] = 2
+    if b[i] == 'Not Connect':
+        data_CV007[i,80] = 5  
+prueba2 = data[e[80]].values
+print(np.unique(prueba2))
+dCV005 = pd.DataFrame(data_CV005,columns = a)
+dCV005['estado_cv05'].values
+np.unique(dCV005[a[57]].values)
+dCV006 = pd.DataFrame(data_CV006,columns = d)
+dCV006['estadoCorrea_cv06'].values
+np.unique(dCV006[d[104]].values)
+import matplotlib.pyplot as plt
+import numpy as np
+t = data.iloc[:,0]
+x = data[Carac[10]] 
+print(x.mean())
+plt.plot(t, x, label=Carac[10])
+plt.legend()
+plt.show()

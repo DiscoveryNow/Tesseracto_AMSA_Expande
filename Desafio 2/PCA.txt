@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+from sklearn.decomposition import PCA
+
+data = pd.read_csv("dataCV005.csv")
+data.shape
+
+for c in range(84):
+    index = 0
+    for i in data.values[:,c]:
+        if not np.isfinite(i):
+            print(c, index, i)
+        index +=1
+data = data.where(np.isfinite(data),0)
+data1 = data.values[:,2:]
+data1
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler(copy=True, with_mean=True, with_std=True)
+data1 = scaler.fit_transform(data1)
+model = PCA(n_components=9).fit(data1)
+X_pc = model.transform(data1)
+n_pcs= model.components_.shape[0]
+np.abs(model.components_)
+model.explained_variance_ratio_ 
+most_important = [np.abs(model.components_[i]).argmax() for i in range(n_pcs)]
+n = 5
+important_features_index = [np.argsort(np.abs(model.components_[i]))[::-1][:n] for i in range(n_pcs)]
+important_features_index
+initial_feature_names = data.keys()[1:]
+initial_feature_names[55]
+most_important_names = [initial_feature_names[most_important[i]] for i in range(n_pcs)]
+dic = {'PC{}'.format(i+1): most_important_names[i] for i in range(n_pcs)}
+df = pd.DataFrame(sorted(dic.items()))
+import matplotlib.pyplot as plt
+t = list(dic.keys())#range(len(model.explained_variance_ratio_ ))
+x = np.cumsum(model.explained_variance_ratio_)
+plt.plot(t, x, label='varianza acumulada')
+plt.legend()
+plt.grid(True)
+plt.show()
+print(x)
+for i in range(n_pcs):
+    for c in range(n):
+        arr[i][c] = initial_feature_names[important_features_index[i][c]]
+arr = np.chararray((n_pcs , n),itemsize=30)
+total_var = pd.DataFrame(data = arr, columns= range(n))
+important_features_index
+np.sum(np.abs(model.components_), axis = 1)
+porcentajes = [np.divide(np.sort(np.abs(model.components_[i]))[::-1][:n],np.sum(np.abs(model.components_),axis = 1)[i]) for i in range(n_pcs)]
+np.sum(porcentajes, axis= 1)
+New_varianzaExp = np.sum(porcentajes, axis= 1)*model.explained_variance_ratio_
+New_varianzaExp
+t = list(dic.keys())#range(len(model.explained_variance_ratio_ ))
+x = np.cumsum(New_varianzaExp)
+print(x)
+plt.plot(t, x, label='Varianza Acumulada n = 5')
+plt.grid(True)
+plt.legend()
+plt.show()
+newVar = data1[:,important_features_index[0]]
+newVar.shape
+newVar2 = data1[:,important_features_index[1]]

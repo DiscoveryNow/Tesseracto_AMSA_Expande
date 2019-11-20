@@ -1,0 +1,90 @@
+from sklearn.neural_network import MLPClassifier
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+df1 = pd.read_csv("STMGLabel.csv", header = None)
+df = pd.read_csv("traindata.csv")
+data = df1.values
+datatrain = df.values
+data.shape
+xtrain = datatrain[:,0:42]
+xtest = data[:, 0:42]
+ytest = data[:,42]
+ytrain = datatrain[:,42]
+scale=StandardScaler()
+scale.fit(xtrain)
+xtest=scale.transform(xtest)
+xtrain=scale.fit_transform(xtrain)
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import r2_score
+from sklearn.metrics import roc_curve
+import seaborn as sn
+import matplotlib.pyplot as plt
+from sklearn.utils.multiclass import unique_labels
+import scikitplot as skplt
+from sklearn.metrics import roc_auc_score
+clf =MLPClassifier(hidden_layer_sizes=(25),activation='relu',max_iter= 400, validation_fraction = 0.25);
+clf.fit(xtrain,ytrain);
+labelspred=clf.predict(xtest)
+conf = confusion_matrix(ytest,labelspred)
+traza=np.trace(conf)/(len(xtest))*100
+r = r2_score(ytest,labelspred)
+print("accuracy: ",traza)
+print("R2: ", r)
+
+plt.clf()
+conf = np.around(conf.astype('float') / conf.sum(axis=1)[:, np.newaxis],decimals = 2)
+cmap = plt.get_cmap('Blues')
+plt.imshow(conf, interpolation='nearest', cmap=cmap)
+classNames = ['Funciona','Falla']
+plt.title('')
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+tick_marks = np.arange(len(classNames))
+plt.xticks(tick_marks, classNames, rotation=45)
+plt.yticks(tick_marks, classNames)
+s = [['TN','FP'], ['FN', 'TP']]
+for i in range(2):
+    for j in range(2):
+        plt.text(j,i, str(s[i][j])+" = "+str(conf[i][j]))
+plt.show()
+
+fpr, tpr, _ = roc_curve(ytest,  labelspred)
+auc = roc_auc_score(ytest, labelspred)
+plt.plot(fpr,tpr,label="NN, auc="+str(np.around(auc,decimals=2)))
+plt.legend(loc=4)
+plt.show()
+
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression(random_state=0, solver='lbfgs', multi_class='multinomial')
+clf.fit(xtrain,ytrain);
+labelspred=clf.predict(xtest)
+conf = confusion_matrix(ytest,labelspred)
+traza=np.trace(conf)/(len(xtest))*100
+r = r2_score(ytest,labelspred)
+print("accuracy: ",traza)
+print("R2: ", r)
+
+plt.clf()
+conf = np.around(conf.astype('float') / conf.sum(axis=1)[:, np.newaxis],decimals = 2)
+cmap = plt.get_cmap('Blues')
+plt.imshow(conf, interpolation='nearest', cmap=cmap)
+classNames = ['Funciona','Falla']
+plt.title('')
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+tick_marks = np.arange(len(classNames))
+plt.xticks(tick_marks, classNames, rotation=45)
+plt.yticks(tick_marks, classNames)
+s = [['TN','FP'], ['FN', 'TP']]
+for i in range(2):
+    for j in range(2):
+        plt.text(j,i, str(s[i][j])+" = "+str(conf[i][j]))
+plt.show()
+
+fpr, tpr, _ = roc_curve(ytest,  labelspred)
+auc = roc_auc_score(ytest, labelspred)
+plt.plot(fpr,tpr,label="LR, auc="+str(np.around(auc,decimals=2)))
+plt.legend(loc=4)
+plt.show()

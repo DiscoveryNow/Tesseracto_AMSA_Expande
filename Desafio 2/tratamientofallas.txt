@@ -1,0 +1,114 @@
+import pandas as pd
+import numpy as np
+data = pd.read_csv("bd_historialDeFallas.csv")
+data
+
+#obtencion de indices de data
+
+equipos = data['equipos'].values
+indSTMG = np.where(equipos == 'STMG')
+total = data['total'].values
+fechaIni = data['fecha inicio'].values
+dataSTMG = data.iloc[indSTMG]
+
+
+#obtencion tiempos de espera
+
+from collections import Counter
+tiempoTotal=dataSTMG['total'].values
+print(np.sum(tiempoTotal)*60.)
+fallaTipoSTMG =dataSTMG['especialidad'] 
+counter = fallaTipoSTMG.values
+counts = Counter(counter)
+g = pd.DataFrame.from_dict(counts, orient='index')
+g.plot(kind='bar')
+h = dataSTMG['especialidad'] =='DEM'
+i = dataSTMG[h]
+tiempoDemora = i['total'].values
+print(np.sum(tiempoDemora)*60.)
+
+# transformacion fechas a minutos
+import re
+import collections, numpy
+for i in range (len(a)):
+    r = re.split('[- :]', a[i])
+    eventosSTMG.append(365*24*60*(int(r[0])-2016)+30*24*60*(int(r[1])-1)+24*60*(int(r[2])-1))
+import numpy as np
+duracion = dataSTMG['total'].values
+collections.Counter(eventosSTMG).keys()
+valDura = []
+
+
+f = list(collections.Counter(eventosSTMG).values())
+print(len(f))
+d = 0
+for i in range(len(list(collections.Counter(eventosSTMG).keys()))):
+    suma = 0
+    for h in range(f[i]):
+        suma = suma + duracion[d]
+        d += 1
+    valDura.append(suma)
+
+labels = np.zeros((1578240,1))
+for i in range(len(f)):
+    for h in range(int(a[i])):        
+        labels[list(collections.Counter(eventosSTMG).keys())[i]+h] = 1
+
+max(a)
+np.where(a==11177)
+
+import matplotlib.pyplot as plt
+t = range(len(labels[0:50000]))
+x = labels[0:50000]
+plt.plot(t, x)
+plt.show()
+
+dataSTMG['modo de falla']
+collections.Counter(dataSTMG['modo de falla'])
+
+modoFalla = dataSTMG['modo de falla'].values
+modoFalla[0]
+duracion
+b=np.multiply(duracion,60)
+b= np.around(b)
+print(modoFalla[0]=='Cinta')
+
+labels_ModoFalla = np.zeros((1578240,1))
+h = 0
+for i in range(len(modoFalla)):
+    if modoFalla[i] == 'Cinta':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 1
+    if modoFalla[i] == 'AFD':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 2
+    if modoFalla[i] == 'Coal Control':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 3
+    if modoFalla[i] == 'Polines':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 4
+    if modoFalla[i] == 'Sist. Frenos':
+        for c in range(int(b[i])):        
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 5
+    if modoFalla[i] == 'DEM-NPR-Sin alimentación mina':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 6
+    if modoFalla[i] == 'Polea':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 7
+    if modoFalla[i] == 'Alimentador':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 8
+    if modoFalla[i] == 'Sist.Enfriamiento-Lub':
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 9
+    if  not modoFalla[i] in clases:
+        for c in range(int(b[i])):
+            labels_ModoFalla[list(collections.Counter(eventosSTMG).keys())[i]+c] = 10
+
+
+t = range(len(labels[0:30000]))
+x = labels[0:30000]
+plt.plot(t, x)
+plt.show()
